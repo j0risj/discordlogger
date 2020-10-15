@@ -5,7 +5,7 @@ import logging
 class DiscordHandler(logging.Handler):
     def __init__(self, username: str,
                  webhook_url: str,
-                 avatar_url: str = None) -> None:
+                 avatar_url: str = None):
         logging.Handler.__init__(self)
         self.json_data = {
             "username": username}
@@ -18,15 +18,3 @@ class DiscordHandler(logging.Handler):
         self.json_data["content"] = f"```\n{msg}\n```"
         response = requests.post(self.webhook_url, json=self.json_data)
         response.raise_for_status()
-
-
-if __name__ == "__main__":
-    logger = logging.getLogger("Logging Test")
-    webhook_url = input("Discord webhook url: \n")
-    dh = DiscordHandler(logger.name, webhook_url)
-    formatter = logging.Formatter(
-        "[%(asctime)s][%(name)s][%(levelname)s]: %(message)s",
-        "%Y-%m-%d %H:%M:%S")
-    dh.setFormatter(formatter)
-    logger.addHandler(dh)
-    logger.error("This is a test log to discord")
